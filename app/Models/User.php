@@ -41,4 +41,40 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getUsers(){
+        $currentUser= Auth()->user();
+
+        $users=self::select('users.*','D.*', 'E.*')
+        ->leftjoin('divisions AS D', 'users.division', '=', 'D.iddiv')
+        ->leftjoin('enterprises AS E', 'users.enterprise', '=', 'E.ident')
+        ->get();
+        // request to get all users in same enterprise of user connected
+        if($currentUser->division!==NULL){
+            $users=self::select('users.*','D.*', 'E.*')
+                    ->join('divisions AS D', 'users.division', '=', 'D.iddiv')
+                    ->join('enterprises AS E', 'users.enterprise', '=', 'E.ident')
+                    ->where('enterprise',$currentUser->enterprise)->get();
+            
+        }
+        if($currentUser->enterprise!==NULL){
+
+            $users=self::select('users.*','D.*', 'E.*')
+            ->leftjoin('divisions AS D', 'users.division', '=', 'D.iddiv')
+            ->join('enterprises AS E', 'users.enterprise', '=', 'E.ident')
+            ->where('enterprise',"=",$currentUser->enterprise)->get();
+        }
+
+        return $users;
+        
+    }
+
+    // function to get one user
+    public static function getOneUser($id){
+        return self::select('users.*','D.*', 'E.*')
+        ->leftjoin('divisions AS D', 'users.division', '=', 'D.iddiv')
+        ->leftjoin('enterprises AS E', 'users.enterprise', '=', 'E.ident')
+        ->where('users.id', $id)
+        ->get();
+    }
 }
