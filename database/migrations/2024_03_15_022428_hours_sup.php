@@ -15,10 +15,10 @@ class HoursSup extends Migration
     {
         //
         Schema::create('hours_sup', function (Blueprint $table) {
-            $table->bigIncrements('idhour_suo');
+            $table->bigIncrements('idhour_sup');
             $table->time('begin_time');
             $table->time('end_time');
-            $table->foreignId('id')
+            $table->foreignId('user')
                 ->constrained('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');

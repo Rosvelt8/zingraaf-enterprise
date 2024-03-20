@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class enterprise extends Model
+class Enterprise extends Model
 {
-    use HasFactory;
+    protected $table = 'enterprises';
+
+    protected $primaryKey = 'ident';
+
+    protected $fillable = ['enterprises'];
+
 }

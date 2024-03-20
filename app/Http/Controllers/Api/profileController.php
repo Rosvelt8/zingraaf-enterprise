@@ -32,16 +32,24 @@ class profileController extends Controller
 
     // get all users profile
     public function showAllUsers() {
-       
-            $users= User::getUsers();
-            dd($users);
-        }
+    
+        $users= User::getUsers();
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'success',
+            'userS' => $users
+        ]);
+    }
     // get all users profile
-    public function showUser() {
+    public function showUser(Request  $request) {
        
-            $users= User::getUsers();
-            dd($users);
-        }
+        $user= User::getOneUser($request->user);
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'success',
+            'user' => $user
+        ]);
+    }
     
     
 

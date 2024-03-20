@@ -15,7 +15,7 @@ class PhotosReport extends Migration
     {
         //
         Schema::create('photos_report', function (Blueprint $table) {
-            $table->bigIncrements('idcat');
+            $table->bigIncrements('idphoto');
             $table->text('photo');
             $table->foreignId('task_rep')
                 ->constrained('tasks_report','idtask_rep')

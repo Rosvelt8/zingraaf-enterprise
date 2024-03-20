@@ -26,6 +26,11 @@ Route::get('/getusers', [profileController::class, 'showAllUsers']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // return $request->user();
+    Route::prefix('user')->group(function(){
+        Route::post('/register', [UserController::class, 'register']);
+        Route::post('/login', [UserController::class, 'login']);
+        Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
+    });
     Route::get('/logout', [UserController::class, 'logout']);
     Route::get('/getuser', [profileController::class, 'logout']);
 });
