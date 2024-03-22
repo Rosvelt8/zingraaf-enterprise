@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function(){
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
-    Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
+    // Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
 });
 
 Route::get('/getusers', [profileController::class, 'showAllUsers']);
@@ -30,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/register', [UserController::class, 'register']);
         Route::post('/login', [UserController::class, 'login']);
         Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
+    });
+    Route::prefix('division')->group(function(){
+        Route::post('/new', [UserController::class, 'register']);
+        Route::de('/updatePassword', [profileController::class, 'showAllUsers']);
+        Route::post('/update', [UserController::class, 'login']);
     });
     Route::get('/logout', [UserController::class, 'logout']);
     Route::get('/getuser', [profileController::class, 'logout']);

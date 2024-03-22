@@ -12,9 +12,9 @@ class TaskController extends Controller
     //create Task function
     public function createTask(Request $request){
         
-        $task= Division::find($request->division);
+        $division= Division::find($request->division);
 
-        if($task){
+        if($division){
 
             $task= new Tasks();
             $task->entitle= $request->entitle;

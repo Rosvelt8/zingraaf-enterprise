@@ -15,7 +15,7 @@ class TrackingController extends Controller
         $hour_tracked= Hours_tracked::where(['user'=>$user->iduser, 'date'=>$date])->first();
         if($hour_tracked){
 
-            $hour_tracked->hour+= 1;
+            $hour_tracked->minute+= $request->cookie;
 
         }else{
 
