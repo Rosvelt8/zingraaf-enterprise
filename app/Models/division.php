@@ -15,5 +15,17 @@ class Division extends Model
 
     protected $fillable = ['divisions'];
 
+
+    public static function getOne($id){
+         return self::select('divisions.*', 'E.name As enterprise_name')
+         ->join('enterprises AS E', 'divisions.enterpise', '=', 'E.ident')
+         ->where('iddiv', $id)->get();
+    }
+    public static function getAll(){
+        return self::select('divisions.*', 'E.name As enterprise_name')
+        ->join('enterprises AS E', 'divisions.enterpise', '=', 'E.ident')
+         ->get();
+    }
+
 }
 

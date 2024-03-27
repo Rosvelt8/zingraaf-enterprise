@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\TaskAssign;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class RequestTaskAssign extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,8 @@ class newTask extends FormRequest
     {
         return [
 
-            'entitle'=> 'required|max:100',
-            'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
-
+            'employees'=>'required|array|array.numeric',
+            'task'=>'required|exists:tasks,idtask',
 
         ];
     }
@@ -47,9 +45,10 @@ class newTask extends FormRequest
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            'employees.*.numeric'=> 'Employee must be a number',
+            'employees.required'=> 'You need at least one employee for assign the task',
+            'employees.array'=> 'Employees should be in array format',
+            'task.exists'=> 'Please an existing task'
         ];
     }
-
 }

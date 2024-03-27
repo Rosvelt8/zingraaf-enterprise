@@ -44,11 +44,12 @@ class User extends Authenticatable
 
     public static function getUsers(){
         $currentUser= Auth()->user();
-
-        $users=self::select('users.*','D.*', 'E.*')
-        ->leftjoin('divisions AS D', 'users.division', '=', 'D.iddiv')
-        ->leftjoin('enterprises AS E', 'users.enterprise', '=', 'E.ident')
-        ->get();
+        if($currentUser->division===NULL && $currentUser->enterprise===NULL){
+            $users=self::select('users.*','D.*', 'E.*')
+            ->leftjoin('divisions AS D', 'users.division', '=', 'D.iddiv')
+            ->leftjoin('enterprises AS E', 'users.enterprise', '=', 'E.ident')
+            ->get();
+        }
         // request to get all users in same enterprise of user connected
         if($currentUser->division!==NULL){
             $users=self::select('users.*','D.*', 'E.*')

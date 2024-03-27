@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\TaskReport;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class RequestTaskReport extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,10 @@ class newTask extends FormRequest
     public function rules()
     {
         return [
-
-            'entitle'=> 'required|max:100',
-            'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
-
+            'photos' => 'array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'task_ass'=>'exists:tasks_assign,idtask_ass',
+            'task_report'=>'exists:tasks_report,idtask_rep',
 
         ];
     }
@@ -47,9 +46,8 @@ class newTask extends FormRequest
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            'task_ass.exists'=> 'Please an existing task assign',
+            'photos.*.image'=> 'Please provide an image'
         ];
     }
-
 }

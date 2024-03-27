@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Task;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class RequestTask extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,10 @@ class newTask extends FormRequest
     {
         return [
 
-            'entitle'=> 'required|max:100',
+            'entitle'=> 'max:100',
             'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
+            'division'=>'exists:divisions,iddiv',
+            'task'=>'required|exists:tasks,idtask',
 
 
         ];
@@ -47,9 +48,8 @@ class newTask extends FormRequest
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            'task.exists'=> 'Please provide an existing task',
+            'division.exists'=> 'Please provide an existing division'
         ];
     }
-
 }

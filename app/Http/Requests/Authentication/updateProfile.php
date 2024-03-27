@@ -49,9 +49,9 @@ class updateProfile extends FormRequest
 
     public function messages(){
         return [
-            'division.exist'=> 'division not exist',
-            'enterprise.exist'=> 'enterprise not exist',
-            'category.exist'=> 'category not exist'
+            'division.exists'=> 'division not exist',
+            'enterprise.exists'=> 'enterprise not exist',
+            'category.exists'=> 'category not exist'
         ];
     }
 }

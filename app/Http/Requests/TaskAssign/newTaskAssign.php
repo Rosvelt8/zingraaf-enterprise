@@ -3,6 +3,8 @@
 namespace App\Http\Requests\TaskAssign;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class newTaskAssign extends FormRequest
 {
@@ -13,7 +15,7 @@ class newTaskAssign extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,29 @@ class newTaskAssign extends FormRequest
     public function rules()
     {
         return [
-            //
+
+            'employees'=>'required|array|array.numeric',
+            'task'=>'required|exists:tasks,idtask',
+
+        ];
+    }
+
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json([
+            'success'=> false,
+            'status_code'=> 422,
+            'error' => true,
+            'message' => 'Validation error',
+            'errorList'=> $validator->errors()
+        ]));
+    }
+
+    public function messages(){
+        return [
+            'employees.*.numeric'=> 'Employee must be a number',
+            'employees.required'=> 'You need at least one employee for assign the task',
+            'employees.array'=> 'Employees should be in array format',
+            'task.exists'=> 'Please an existing task'
         ];
     }
 }

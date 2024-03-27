@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Division\newDivision;
+use App\Http\Requests\Division\RequestDivision;
 use App\Models\Division;
 use App\Models\Enterprise;
 use Illuminate\Http\Request;
@@ -10,14 +12,14 @@ use Illuminate\Http\Request;
 class DivisionController extends Controller
 {
     //create enterprise function
-    public function createDivision(Request $request){
+    public function createDivision(newDivision $request){
         $enterprise= Enterprise::find($request->enterprise);
 
         if($enterprise){
 
             $division= new Division();
             $division->name= $request->name;
-            $division->enterprise= $enterprise->ident;
+            $division->enterpise= $enterprise->ident;
             $division->save();
     
             return response()->json([
@@ -26,15 +28,22 @@ class DivisionController extends Controller
                 'user' => $division
             ]);
         }
+        return response()->json([
+            'status_code' => 403,
+            'status_message' => 'Error! Please redo action'
+            
+        ]);
 
     }
 
     // update enterprise function
-    public function updateDivision(Request $request){
+    public function updateDivision(RequestDivision $request){
         
         $division= Division::find($request->division);
         if($division) {
-            $division->update($request->all());
+            $division->name= $request->name;
+            $division->enterpise= $request->enterprise;
+            $division->update(array($division));
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'success',
@@ -49,15 +58,15 @@ class DivisionController extends Controller
     }
 
     // get one division function
-    public function getDivision(Request $request){
+    public function getDivision(RequestDivision $request){
         
-        $division= Enterprise::find($request->enterprise);
+        $division= Division::getOne($request->division);
         if($division){
             
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'Success',
-                'enterprise' => $division
+                'division' => $division
                 
             ]);
         }
@@ -82,7 +91,7 @@ class DivisionController extends Controller
         ]);
     }
     // update division function
-    public function deleteDivision(Request $request){
+    public function deleteDivision(RequestDivision $request){
         
         $division= Division::find($request->division)->delete();
         return response()->json([

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\Authentication;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class RequestProfile extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,7 @@ class newTask extends FormRequest
     public function rules()
     {
         return [
-
-            'entitle'=> 'required|max:100',
-            'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
-
-
+            'user'=> 'required|exists:users,id'
         ];
     }
 
@@ -47,9 +42,7 @@ class newTask extends FormRequest
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            'user.exists'=> 'User does not exist'
         ];
     }
-
 }

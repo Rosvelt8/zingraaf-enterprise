@@ -1,33 +1,26 @@
 <?php
 
-namespace App\Http\Requests\Division;
+namespace App\Http\Requests\Enterprise;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newDivision extends FormRequest
+class newEnterprise extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'name'=>'required|max:50',
-            'enterprise'=>'required|numeric|exists:enterprises,ident',
+            'contact'=>'required|max:50',
+            'address'=>'required|max:50',
+            'open_hours'=>'required|date_format:H:i:s',
+            'close_hours'=>'required|date_format:H:i:s',
             
         ];
     }
@@ -45,7 +38,10 @@ class newDivision extends FormRequest
     public function messages(){
         return [
             'name.required'=> 'Please provide an enterprise name',
-            'enterprise.exists'=> 'Please provide an existing enterprise',
+            'address.required'=> 'Please provide an enterprise address',
+            'contact.required'=> 'Please provide an enterprise contact',
+            'open_hours.date_format'=> 'Please provide a time in format 00:00:00',
+            'close_hours.date_format'=> 'Please provide a time in format 00:00:00',
             
         ];
     }

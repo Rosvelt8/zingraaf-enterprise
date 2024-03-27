@@ -3,6 +3,8 @@
 namespace App\Http\Requests\HoursTracked;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class registHourTracked extends FormRequest
 {
@@ -11,20 +13,28 @@ class registHourTracked extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'cookie'=>'required|numeric',
+
+        ];
+    }
+
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json([
+            'success'=> false,
+            'status_code'=> 422,
+            'error' => true,
+            'message' => 'Validation error',
+            'errorList'=> $validator->errors()
+        ]));
+    }
+
+    public function messages(){
+        return [
+            'cookie.required'=> 'Please enter time to track',
+            'cookie.numeric'=> 'Please enter a valid numeric',
         ];
     }
 }

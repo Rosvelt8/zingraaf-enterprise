@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Hours_tracked;
 use Illuminate\Http\Request;
+use App\Models\Hours_tracked;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\HoursTracked\registHourTracked;
 
 class TrackingController extends Controller
 {
     //set employee work time
-    public function employeeTracking(Request $request) {
+    public function employeeTracking(registHourTracked $request) {
         $date= date('Y-m-d');
         $user= Auth()->user();
         $hour_tracked= Hours_tracked::where(['user'=>$user->iduser, 'date'=>$date])->first();

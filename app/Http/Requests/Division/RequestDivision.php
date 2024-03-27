@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\Division;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class RequestDivision extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,10 @@ class newTask extends FormRequest
     public function rules()
     {
         return [
-
-            'entitle'=> 'required|max:100',
-            'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
-
-
+            'name'=>'max:50',
+            'enterprise'=>'numeric|exists:enterprises,ident',
+            'division'=>'required|numeric|exists:divisions,iddiv',
+            
         ];
     }
 
@@ -40,16 +38,16 @@ class newTask extends FormRequest
             'success'=> false,
             'status_code'=> 422,
             'error' => true,
-            'message' => 'Validation error',
+            'message' => 'Erreur de validation',
             'errorList'=> $validator->errors()
         ]));
     }
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            'enterprise.exists'=> 'Please provide an existing enterprise',
+            'division.exists'=> 'Please provide an existing division',
+            
         ];
     }
-
 }

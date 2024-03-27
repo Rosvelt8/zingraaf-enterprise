@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\HoursSupp\newHourSupp;
+use App\Http\Requests\HoursSupp\RequestHourSupp;
 use App\Models\Hours_sup;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 class hoursSuppController extends Controller
 {
     // Add hour supp for employee function
-    public function addHoursSupp(Request $request){
+    public function addHoursSupp(newHourSupp $request){
         $user= User::find($request->employee);
 
         if($user){
@@ -30,7 +32,7 @@ class hoursSuppController extends Controller
 
     }
     // Add hour supp for employee function
-    public function getHourSuppByEmployee(Request $request){
+    public function getHourSuppByEmployee(RequestHourSupp $request){
         
         $hour_supp= Hours_sup::where('user',$request->employee);
 

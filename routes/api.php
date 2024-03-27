@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\DivisionController;
+use App\Http\Controllers\Api\EnterpriseController;
+use App\Http\Controllers\Api\hoursSuppController;
 use App\Http\Controllers\Api\profileController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TaskReportController;
+use App\Http\Controllers\Api\TrackingController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,26 +25,61 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function(){
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
-    // Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
 });
 
-Route::get('/getusers', [profileController::class, 'showAllUsers']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    // return $request->user();
-    Route::prefix('user')->group(function(){
-        Route::post('/register', [UserController::class, 'register']);
-        Route::post('/login', [UserController::class, 'login']);
-        Route::put('/updatePassword', [profileController::class, 'showAllUsers']);
-    });
-    Route::prefix('division')->group(function(){
-        Route::post('/new', [UserController::class, 'register']);
-        Route::de('/updatePassword', [profileController::class, 'showAllUsers']);
-        Route::post('/update', [UserController::class, 'login']);
-    });
+    
+    Route::post('/updatePassword', [profileController::class, 'updatePassword']);
     Route::get('/logout', [UserController::class, 'logout']);
-    Route::get('/getuser', [profileController::class, 'logout']);
+    Route::get('/getAuthUser', [profileController::class, 'getProfile']);
+    Route::get('/getuser', [profileController::class, 'showUser']);
+    Route::get('/getusers', [profileController::class, 'showAllUsers']);
+
+
+    Route::prefix('enterprise')->group(function(){
+        Route::post('/new', [EnterpriseController::class, 'createEnterprise']);
+        Route::put('/update', [EnterpriseController::class, 'updateEnterprise']);
+        Route::get('/getOne', [EnterpriseController::class, 'getEnterprise']);
+        Route::get('/getAll', [EnterpriseController::class, 'getAllEnterprises']);
+        Route::delete('/delete', [EnterpriseController::class, 'deleteEnterprise']);
+    });
+    
+    
+    
+    Route::prefix('division')->group(function(){
+        Route::post('/new', [DivisionController::class, 'createDivision']);
+        Route::put('/update', [DivisionController::class, 'updateDivision']);
+        Route::get('/getOne', [DivisionController::class, 'getDivision']);
+        Route::get('/getAll', [DivisionController::class, 'getAllDivisions']);
+        Route::delete('/delete', [DivisionController::class, 'deleteDivision']);
+        
+    });
+    Route::prefix('hoursSupp')->group(function(){
+        Route::post('/new', [hoursSuppController::class, 'createDivision']);
+        Route::get('/getAll', [hoursSuppController::class, 'getHourSuppByEmployee']);
+        
+    });
+
+    Route::prefix('hours')->group(function(){
+        Route::post('/track', [TrackingController::class, 'employeeTracking']);
+        
+    });
+    
+    Route::prefix('task')->group(function(){
+        Route::post('/new', [TaskController::class, 'createTask']);
+        Route::put('/update', [TaskController::class, 'updateTask']);
+        Route::get('/getOne', [TaskController::class, 'getTask']);
+        Route::get('/getAll', [TaskController::class, 'getAllTasks']);
+        Route::post('/assign', [TaskController::class, 'assignTask']);
+        Route::put('/updateAssignStatus', [TaskController::class, 'updateAssignStatus']);
+        Route::delete('/delete', [TaskController::class, 'deleteTask']);
+    });
+
+    Route::prefix('taskReport')->group(function(){
+        Route::post('/createTaskReport', [TaskReportController::class, 'createTaskReport']);
+        
+    });
 });
-// test route
 
 

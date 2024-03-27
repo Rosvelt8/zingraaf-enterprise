@@ -76,10 +76,11 @@ class UserController extends Controller
     public function updatePassword(updatePassword $request)
     {
         $user = Auth()->user();
+        $user= User::find($user->id);
         $user->password = Hash::make($request->password, [
             'round'=>12
         ]);
-        $user->save();
+        $user->update(array($user));
         return response()->json([
             'status_code'=> 200,
             'status_message' => 'Password updated successfully'

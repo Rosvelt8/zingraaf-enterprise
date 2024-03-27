@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Task\newTask;
+use App\Http\Requests\Task\RequestTask;
+use App\Http\Requests\TaskAssign\newTaskAssign;
+use App\Http\Requests\TaskAssign\RequestTaskAssign;
 use App\Models\Division;
 use App\Models\Tasks;
+use App\Models\Tasks_assign;
+use App\Models\User;
 use Illuminate\Http\Request;
+use TasksAssign;
 
 class TaskController extends Controller
 {
     //create Task function
-    public function createTask(Request $request){
+    public function createTask(newTask $request){
         
         $division= Division::find($request->division);
 
@@ -19,12 +26,12 @@ class TaskController extends Controller
             $task= new Tasks();
             $task->entitle= $request->entitle;
             $task->description= $request->description;
-            $task->division= $task->iddiv;
+            $task->division= $division->iddiv;
             $task->save();
     
             return response()->json([
                 'status_code' => 200,
-                'status_message' => 'success',
+                'status_message' => 'created successfully',
                 'task' => $task
             ]);
         }
@@ -32,14 +39,16 @@ class TaskController extends Controller
     }
 
     // update task function
-    public function updateTask(Request $request){
+    public function updateTask(RequestTask $request){
         
-        $task= Tasks::find($request->division);
+        $task= Tasks::find($request->task);
         if($task) {
-            $task->update($request->all());
+            $task->entitle= $request->entitle;
+            $task->description= $request->description;
+            $task->update(array($task));
             return response()->json([
                 'status_code' => 200,
-                'status_message' => 'success',
+                'status_message' => 'update successfull',
                 'task' => $task
             ]);
         }
@@ -51,7 +60,7 @@ class TaskController extends Controller
     }
 
     // get one task function
-    public function getTask(Request $request){
+    public function getTask(RequestTask $request){
         
         $task= Tasks::find($request->task);
         if($task){
@@ -83,8 +92,43 @@ class TaskController extends Controller
             
         ]);
     }
+
+    public function assignTask(newTaskAssign $request){
+        // dd($request);
+        $task= Tasks::find($request->task);
+        $employees=$request->employees;
+        foreach ($employees as $employee){
+            $user= User::find($employee);
+            if($user){
+                $assignTask= new Tasks_assign();
+                $assignTask->user=$user->id;
+                $assignTask->task=$task->idtask;
+                $assignTask->save();
+            }
+        }
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Assignment done successfully',
+            
+        ]);
+    }
     // update Task function
-    public function deleteTasks(Request $request){
+     public function updateAssignStatus(RequestTaskAssign $request){
+        $taskAssign= Tasks_assign::find(intval($request->id));
+        $taskAssign->status =$request->status ;
+        $taskAssign->update(array($taskAssign));
+        return response()->json([
+            "message" => "success",
+            "status_code"=>201 ,
+            "data"=>[
+                   "id"=>$taskAssign->id,
+                   "status"=>$taskAssign->status
+               ],
+           ]);
+     }
+
+
+    public function deleteTasks(RequestTask $request){
         
         $task= Tasks::find($request->task)->delete();
         return response()->json([

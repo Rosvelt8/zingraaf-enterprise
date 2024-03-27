@@ -1,37 +1,25 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\HoursSupp;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class newTask extends FormRequest
+class newHourSupp extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-
-            'entitle'=> 'required|max:100',
-            'description'=>'max:255',
-            'division'=>'required|exists:divisions,iddiv',
-
-
+            'employee'=>'required|exists:users,id',
+            'begin_time'=>'required|date_format:H:i:s',
+            'end_time'=>'required|date_format:H:i:s',
+            
         ];
     }
 
@@ -40,16 +28,18 @@ class newTask extends FormRequest
             'success'=> false,
             'status_code'=> 422,
             'error' => true,
-            'message' => 'Validation error',
+            'message' => 'Erreur de validation',
             'errorList'=> $validator->errors()
         ]));
     }
 
     public function messages(){
         return [
-            'entitle.required'=> 'Please provide an entitle',
-            'division.exists'=> 'Please an existing division'
+            
+            'employee.required'=> 'Please provide an existing employee',
+            'begin_time.date_format'=> 'Please provide a time in format 00:00:00',
+            'end_time.date_format'=> 'Please provide a time in format 00:00:00',
+            
         ];
     }
-
 }

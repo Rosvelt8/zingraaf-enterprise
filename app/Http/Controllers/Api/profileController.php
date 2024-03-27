@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Authentication\RequestProfile;
 use App\Http\Requests\Authentication\updateProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class profileController extends Controller
 {
@@ -22,7 +25,14 @@ class profileController extends Controller
     // get update user profile
     public function updateProfile(updateProfile $request){
         $user = auth()->user();
-        $user->update($request->all());
+        $user= User::find($user->id);
+        $user->name= $request->name;
+        $user->surname= $request->name;
+        $user->password= Hash::make($request->password, [
+            'round'=>12
+        ]) ;
+        $user->phone= $request->phone;
+        $user->update(array($user));
         return response()->json([
             'status_code' => 200,
             'status_message' => 'success',
@@ -32,16 +42,16 @@ class profileController extends Controller
 
     // get all users profile
     public function showAllUsers() {
-    
+        // dd("ok");
         $users= User::getUsers();
         return response()->json([
             'status_code' => 200,
             'status_message' => 'success',
-            'userS' => $users
+            'users' => $users
         ]);
     }
-    // get all users profile
-    public function showUser(Request  $request) {
+    // get one user profile
+    public function showUser(RequestProfile $request) {
        
         $user= User::getOneUser($request->user);
         return response()->json([
