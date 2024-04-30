@@ -55,8 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete', [DivisionController::class, 'deleteDivision']);
         
     });
+
     Route::prefix('hoursSupp')->group(function(){
-        Route::post('/new', [hoursSuppController::class, 'createDivision']);
+        Route::post('/new', [hoursSuppController::class, 'addHoursSupp']);
         Route::get('/getAll', [hoursSuppController::class, 'getHourSuppByEmployee']);
         
     });
@@ -71,6 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update', [TaskController::class, 'updateTask']);
         Route::get('/getOne', [TaskController::class, 'getTask']);
         Route::get('/getAll', [TaskController::class, 'getAllTasks']);
+        Route::get('/listAssigned', [TaskController::class, 'getAllTasksAssigned']);
+        Route::get('/listAssignedByTask', [TaskController::class, 'getAllTasksAssignedByTask']);
         Route::post('/assign', [TaskController::class, 'assignTask']);
         Route::put('/updateAssignStatus', [TaskController::class, 'updateAssignStatus']);
         Route::delete('/delete', [TaskController::class, 'deleteTask']);
@@ -78,6 +81,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('taskReport')->group(function(){
         Route::post('/createTaskReport', [TaskReportController::class, 'createTaskReport']);
+        Route::post('/reportPhoto', [TaskReportController::class, 'createPhotoReport']);
+        Route::get('/getTaskReport', [TaskReportController::class, 'getTaskReport']);
+        Route::get('/getTasksReportForManagers', [TaskReportController::class, 'getAllTasksReports']);
+        Route::get('/getTasksReportForEmployees', [TaskReportController::class, 'getAllTasksReports']);
         
     });
 });

@@ -27,7 +27,7 @@ class newTaskAssign extends FormRequest
     {
         return [
 
-            'employees'=>'required|array|array.numeric',
+            'employees'=>'required|array',
             'task'=>'required|exists:tasks,idtask',
 
         ];

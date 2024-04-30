@@ -16,7 +16,7 @@ class HoursTracked extends Migration
         //
         Schema::create('hours_tracked', function (Blueprint $table) {
             $table->bigIncrements('idhour');
-            $table->string('minute', 100);
+            $table->integer('minute', 100);
             $table->date('date');
             $table->foreignId('user')
                 ->constrained('users', 'id')

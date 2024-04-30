@@ -62,7 +62,7 @@ class TaskController extends Controller
     // get one task function
     public function getTask(RequestTask $request){
         
-        $task= Tasks::find($request->task);
+        $task= Tasks::getOne($request->task);
         if($task){
             
             return response()->json([
@@ -93,8 +93,30 @@ class TaskController extends Controller
         ]);
     }
 
+    public function getAllTasksAssigned(RequestTask $request){
+        
+        $tasks= Tasks_assign::getAllTasksAssigned(['tasks_assign.task'=>$request->task]);
+            
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Success',
+            'tasks_assigned' => $tasks
+            
+        ]);
+    }
+    public function getAllTasksAssignedByTask(RequestTask $request){
+        
+        $tasks= Tasks_assign::getAllTasksAssigned(['tasks_assign.user'=> $request->employee]);
+            
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Success',
+            'tasks_assigned' => $tasks
+             
+        ]);
+    }
+
     public function assignTask(newTaskAssign $request){
-        // dd($request);
         $task= Tasks::find($request->task);
         $employees=$request->employees;
         foreach ($employees as $employee){
@@ -114,8 +136,8 @@ class TaskController extends Controller
     }
     // update Task function
      public function updateAssignStatus(RequestTaskAssign $request){
-        $taskAssign= Tasks_assign::find(intval($request->id));
-        $taskAssign->status =$request->status ;
+        $taskAssign= Tasks_assign::find(intval($request->taskAssign));
+        $taskAssign->status =$request->status;
         $taskAssign->update(array($taskAssign));
         return response()->json([
             "message" => "success",
@@ -128,7 +150,7 @@ class TaskController extends Controller
      }
 
 
-    public function deleteTasks(RequestTask $request){
+    public function deleteTask(RequestTask $request){
         
         $task= Tasks::find($request->task)->delete();
         return response()->json([

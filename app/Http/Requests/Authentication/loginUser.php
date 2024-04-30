@@ -23,7 +23,7 @@ class loginUser extends FormRequest
     {
         return [
             
-            'email'=>'required|email|max:255|exists:users,email',
+            'identifiant'=>'required|regex:/^ZENT\d{4}\d{4}$/|max:12|exists:users,identifiant',
             'password'=>'required|min:6',
             
         ];
@@ -47,9 +47,9 @@ class loginUser extends FormRequest
     public function messages(){
         return [
             
-            'email.required'=> 'Please provide an email',
-            'email.email'=> 'Please provide a valid email',
-            'email.exists'=> 'This email does not exist',
+            'identifiant.required'=> 'Please provide an email',
+            'identifiant.regex'=> 'Invalid format provided',
+            'identifiant.exists'=> 'This email does not exist',
             'password.required'=> 'Please provide an password',
         ];
     }

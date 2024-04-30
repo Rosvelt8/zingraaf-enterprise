@@ -20,7 +20,7 @@ class hoursSuppController extends Controller
             $hour_supp= new Hours_sup();
             $hour_supp->begin_time= $request->begin_time;
             $hour_supp->end_time= $request->end_time;
-            $hour_supp->user= $user->iduser;
+            $hour_supp->id= $user->id;
             $hour_supp->save();
 
             return response()->json([
@@ -34,7 +34,7 @@ class hoursSuppController extends Controller
     // Add hour supp for employee function
     public function getHourSuppByEmployee(RequestHourSupp $request){
         
-        $hour_supp= Hours_sup::where('user',$request->employee);
+        $hour_supp= Hours_sup::where('id',$request->employee)->get();
 
         if($hour_supp){
             return response()->json([

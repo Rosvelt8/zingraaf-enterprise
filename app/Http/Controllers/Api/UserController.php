@@ -16,16 +16,32 @@ class UserController extends Controller
     public function register(registerUser $request){
 
         try{
+            // dd($request->all());
+            $utilisateur = User::latest()->first();
             $user= new User();
+            $last = User::latest()->first();
+            $user->identifiant= $this->generateUserId($request->enterprise, $last->id+1);
+            if($request->role=="AD"){
+                $user->identifiant= $this->generateUserId(0, $last->id+1);
+            }
+            
+            if($request->role=="GM" || $request->role=="DM" || $request->role=="EM"){
+                $user->enterprise= $request->enterprise;
+            }
+            if($request->role=="DM" || $request->role=="EM"){
+                $user->division= $request->division;
+            }
+            
             $user->name= $request->name;
-            $user->surname= $request->name;
+            $user->surname= $request->surname;
             $user->email= $request->email;
             $user->password= Hash::make($request->password, [
                 'round'=>12
-            ]) ;
-            $user->role= $request->role;
-            $user->employee_date= Date('Y-m-d');
-            $user->phone= $request->phone;
+                ]) ;
+                
+                $user->role= $request->role;
+                $user->employee_date= Date('Y-m-d');
+                $user->phone= $request->phone;
             
     
             $user->save();
@@ -43,9 +59,21 @@ class UserController extends Controller
         
     }
 
+    
+
+    public function generateUserId($entrepriseId, $utilisateurId) {
+      $utilisateurIdStr = (string) $utilisateurId;
+    
+      $format = "ZENT%04d%04d";
+    
+      $identifiant = sprintf($format, $entrepriseId, str_pad($utilisateurIdStr, 4, "0", STR_PAD_LEFT));
+    
+      return $identifiant;
+    }
+
     // Login user function
     public function login(loginUser $request){
-        if(Auth()->attempt($request->only(['email','password']))){
+        if(Auth()->attempt($request->only(['identifiant','password']))){
             $user= Auth()->user();
             $token= $user->createToken('USER AUTHENTICATION KEY')->plainTextToken;
             

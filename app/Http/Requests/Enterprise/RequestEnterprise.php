@@ -16,7 +16,7 @@ class RequestEnterprise extends FormRequest
     public function rules()
     {
         return [
-            'enterprise'=>'required|exists:enterprise,ident',
+            'enterprise'=>'required|exists:enterprises,ident',
             'name'=>'max:50',
             'contact'=>'max:50',
             'address'=>'max:50',

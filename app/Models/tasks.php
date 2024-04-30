@@ -20,7 +20,7 @@ class Tasks extends Model
 
         if($currentUser->division===NULL && $currentUser->enterprise===NULL){
             $tasks=self::select('tasks.*','D.*')
-            ->leftjoin('divisions AS D', 'tasks.division', '=', 'D.iddiv')
+            ->join('divisions AS D', 'tasks.division', '=', 'D.iddiv')
             ->get();
         }
         // request to get all tasks in same enterprise of user connected
@@ -38,5 +38,11 @@ class Tasks extends Model
         }
 
         return $tasks;
+    }
+
+    public static function getOne(int $task){
+        return self::select('tasks.*','D.*')
+            ->join('divisions AS D', 'tasks.division', '=', 'D.iddiv')
+            ->where('tasks', $task)->first();
     }
 }

@@ -31,7 +31,9 @@ class registerUser extends FormRequest
             'email'=>'required|email|max:255|unique:users',
             'password'=>'required|min:8|confirmed',
             'role'=>'required|max:2',
-            'phone'=>'required|max:20'
+            'phone'=>'required|max:20',
+            'enterprise'=>'required_if:role,DM,GM,EM|exists:enterprises,ident',
+            'division'=>'required_if:role,DM,EM|exists:divisions,iddiv',
             // 'address'=>'required|max:255',
         ];
     }
@@ -55,6 +57,10 @@ class registerUser extends FormRequest
             'password.required'=> 'Please provide an password',
             'phone.required'=> 'Please provide a phone number',
             'role.required'=> 'You could not create user without role',
+            'enterprise.required_if'=> 'You need to be in some enterprise to get this role',
+            'division.required_if'=> 'You need to be in some division to get this role',
+            'enterprise.exists'=> 'enterprise does not exist',
+            'division.exists'=> 'division does not exist',
         ];
     }
 }

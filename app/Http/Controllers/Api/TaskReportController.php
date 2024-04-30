@@ -25,18 +25,7 @@ class TaskReportController extends Controller
             $task_report->task_ass= $task->idtask;
             $task_report->save();
 
-            $photos= $request->photos;
-            if(count($photos) > 0) {
-                foreach ($photos as $photo) {
-                    // store image in storage and save name in database photos_report
-                    $fileName = uniqid() . '.' . $photo->getClientOriginalExtension(); // Generate unique filename
-                    $photo->storeAs('public/tasks', $fileName);
-                    $photo_report= new Photos_report();
-                    $photo_report->photo= $fileName;
-                    $photo_report->task_rep= $task_report->idtask_rep;
-                    
-                }
-            }
+           
             $task->status="R";
             $task->update(array($task));
     
@@ -44,6 +33,31 @@ class TaskReportController extends Controller
                 'status_code' => 200,
                 'status_message' => 'success',
                 'task_report' => $task_report
+            ]);
+        }
+
+    }
+    //create task report function
+    public function createPhotoReport(newTaskReport $request){
+        $report= Photos_report::find($request->report);
+
+        if($report){
+
+            $photo= $request->photo;
+            // store image in storage and save name in database photos_report
+            $fileName = uniqid() . '.' . $photo->getClientOriginalExtension(); // Generate unique filename
+            $photo->storeAs('public/tasks', $fileName);
+            $photo_report= new Photos_report();
+            $photo_report->photo= $fileName;
+            $photo_report->task_rep= $report->idtask_rep;
+            $photo_report->save();
+            
+            
+    
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'success',
+                'photo' => $fileName
             ]);
         }
 
@@ -92,8 +106,15 @@ class TaskReportController extends Controller
 
     public function getAllTasksReports(RequestTaskReport $request){
         
-        $task_reports= Tasks_report::GetAll($request->task_ass);
+        $user= Auth()->user();
+        if($user->role=='EM'){
+            $task_reports= Tasks_report::getAllForEmployee($request->task_ass);
             
+        }else{
+            $task_reports= Tasks_report::getAllForDivision($request->task_ass);
+
+        }
+
         return response()->json([
             'status_code' => 200,
             'status_message' => 'Success',

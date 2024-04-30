@@ -25,7 +25,7 @@ class DivisionController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'success',
-                'user' => $division
+                'division' => $division
             ]);
         }
         return response()->json([
